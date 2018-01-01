@@ -1,0 +1,167 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Neo.AddIn.Contracts.MotionControllers</name>
+    </assembly>
+    <members>
+        <member name="T:Neo.AddIn.Contracts.MotionControllers.AxisStatus">
+            <summary>
+            轴信号状态。
+            </summary>
+        </member>
+        <member name="F:Neo.AddIn.Contracts.MotionControllers.AxisStatus.EMG">
+            <summary>
+            急停信号。
+            </summary>
+        </member>
+        <member name="F:Neo.AddIn.Contracts.MotionControllers.AxisStatus.ALM">
+            <summary>
+            报警信号。
+            </summary>
+        </member>
+        <member name="F:Neo.AddIn.Contracts.MotionControllers.AxisStatus.PEL">
+            <summary>
+            正限位信号。
+            </summary>
+        </member>
+        <member name="F:Neo.AddIn.Contracts.MotionControllers.AxisStatus.MEL">
+            <summary>
+            负限位信号。
+            </summary>
+        </member>
+        <member name="F:Neo.AddIn.Contracts.MotionControllers.AxisStatus.ORG">
+            <summary>
+            原点信号。
+            </summary>
+        </member>
+        <member name="F:Neo.AddIn.Contracts.MotionControllers.AxisStatus.INP">
+            <summary>
+            到位信号。
+            </summary>
+        </member>
+        <member name="F:Neo.AddIn.Contracts.MotionControllers.AxisStatus.RDY">
+            <summary>
+            伺服正常信号。
+            </summary>
+        </member>
+        <member name="T:Neo.AddIn.Contracts.MotionControllers.IMotionController">
+            <summary>
+            运动控制器接口。
+            </summary>
+        </member>
+        <member name="M:Neo.AddIn.Contracts.MotionControllers.IMotionController.Initialize">
+            <summary>
+            初始化运动控制器。
+            </summary>
+        </member>
+        <member name="M:Neo.AddIn.Contracts.MotionControllers.IMotionController.GetDI(System.Int32)">
+            <summary>
+            获取数字输入状态。
+            </summary>
+            <param name="port">从零开始计数的数字输入端口号。</param>
+            <returns>正逻辑返回true，负逻辑返回false。</returns>
+        </member>
+        <member name="M:Neo.AddIn.Contracts.MotionControllers.IMotionController.GetDO(System.Int32)">
+            <summary>
+            获取数字输出状态。
+            </summary>
+            <param name="port">从零开始计数的数字输出端口号。</param>
+            <returns>正逻辑返回true，负逻辑返回false。</returns>
+        </member>
+        <member name="M:Neo.AddIn.Contracts.MotionControllers.IMotionController.SetDO(System.Int32,System.Boolean)">
+            <summary>
+            设置数字输出状态。
+            </summary>
+            <param name="port">从零开始计数的数字输出端口号。</param>
+            <param name="status">数字输出逻辑状态。</param>
+        </member>
+        <member name="M:Neo.AddIn.Contracts.MotionControllers.IMotionController.GetStatus(System.Int32)">
+            <summary>
+            获取轴信号状态。
+            </summary>
+            <param name="axis">从零开始计数的轴编号。</param>
+            <returns>返回指定轴的信号状态。</returns>
+        </member>
+        <member name="M:Neo.AddIn.Contracts.MotionControllers.IMotionController.GetStatusMask(System.Int32)">
+            <summary>
+            获取轴信号状态的有效标志位。
+            </summary>
+            <param name="axis">从零开始计数的轴编号。</param>
+            <returns>返回指定轴的信号状态的有效标志位。</returns>
+        </member>
+        <member name="M:Neo.AddIn.Contracts.MotionControllers.IMotionController.GetPosition(System.Int32)">
+            <summary>
+            获取轴位置。
+            </summary>
+            <param name="axis">从零开始计数的轴编号。</param>
+            <returns>返回轴位置。</returns>
+        </member>
+        <member name="M:Neo.AddIn.Contracts.MotionControllers.IMotionController.ZeroPosition(System.Int32)">
+            <summary>
+            设置轴当前位置为零点。
+            </summary>
+            <param name="axis">从零开始计数的轴编号。</param>
+        </member>
+        <member name="M:Neo.AddIn.Contracts.MotionControllers.IMotionController.Home(System.Int32,System.Double,System.Double)">
+            <summary>
+            启动轴归零。
+            </summary>
+            <param name="axis">从零开始计数的轴编号。</param>
+            <param name="direction">归零方向，正方向为+1，负方向为-1。</param>
+            <param name="speed">指定归零时的速度，单位为：脉冲数/秒。</param>
+        </member>
+        <member name="M:Neo.AddIn.Contracts.MotionControllers.IMotionController.Locate(System.Int32,System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            启动轴绝对定位。
+            </summary>
+            <param name="axis">从零开始计数的轴编号。</param>
+            <param name="position">指定目标位置，单位为：脉冲数。</param>
+            <param name="speed">指定移动速度，单位为：脉冲数/秒。</param>
+            <param name="tacc_sec">指定加速时间，单位为：秒。</param>
+            <param name="tdec_sec">指定减速时间，单位为：秒。</param>
+        </member>
+        <member name="M:Neo.AddIn.Contracts.MotionControllers.IMotionController.Offset(System.Int32,System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            启动轴相对定位。
+            </summary>
+            <param name="axis">从零开始计数的轴编号。</param>
+            <param name="position">指定偏移值，单位为：脉冲数。</param>
+            <param name="speed">指定移动速度，单位为：脉冲数/秒。</param>
+            <param name="tacc_sec">指定加速时间，单位为：秒。</param>
+            <param name="tdec_sec">指定减速时间，单位为：秒。</param>
+        </member>
+        <member name="M:Neo.AddIn.Contracts.MotionControllers.IMotionController.ToSpeed(System.Int32,System.Double,System.Double,System.Double)">
+            <summary>
+            加速或减速轴到指定速度，并保持速度。
+            </summary>
+            <param name="axis">从零开始计数的轴编号。</param>
+            <param name="speed">指定目标速度，单位为：脉冲数/秒。</param>
+            <param name="tacc_sec">指定加速时间，单位为：秒。</param>
+            <param name="tdec_sec">指定减速时间，单位为：秒。</param>
+        </member>
+        <member name="M:Neo.AddIn.Contracts.MotionControllers.IMotionController.Stop(System.Int32)">
+            <summary>
+            停止轴运动。
+            </summary>
+            <param name="axis">从零开始计数的轴编号。</param>
+        </member>
+        <member name="M:Neo.AddIn.Contracts.MotionControllers.IMotionController.IsStop(System.Int32)">
+            <summary>
+            查询轴是否已经停止运动。
+            </summary>
+            <param name="axis">从零开始计数的轴编号。</param>
+            <returns>如果已经停止返回值true，否则false。</returns>
+        </member>
+        <member name="T:Neo.AddIn.Contracts.MotionControllers.IMotionControllerManager">
+            <summary>
+            控制器管理器
+            </summary>
+        </member>
+        <member name="M:Neo.AddIn.Contracts.MotionControllers.IMotionControllerManager.GetMotionControllers">
+            <summary>
+            获取所有的控制器。
+            </summary>
+            <returns>返回支持的控制器数组。</returns>
+        </member>
+    </members>
+</doc>

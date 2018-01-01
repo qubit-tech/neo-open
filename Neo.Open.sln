@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AddIns", "AddIns", "{6AF7D0E5-EBB7-4B2F-B616-FD0029F91147}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neo.AddIn.GTS", "AddIns\Neo.AddIn.GTS\Neo.AddIn.GTS.csproj", "{3D81471B-A5FC-4E3C-9839-84C4BFE752C7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neo.AddIn.Solidtech", "AddIns\Neo.AddIn.Solidtech\Neo.AddIn.Solidtech.csproj", "{D1C1B41F-543D-4C20-A1E5-29ED8AD5489B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3D81471B-A5FC-4E3C-9839-84C4BFE752C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D81471B-A5FC-4E3C-9839-84C4BFE752C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D81471B-A5FC-4E3C-9839-84C4BFE752C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D81471B-A5FC-4E3C-9839-84C4BFE752C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D1C1B41F-543D-4C20-A1E5-29ED8AD5489B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1C1B41F-543D-4C20-A1E5-29ED8AD5489B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1C1B41F-543D-4C20-A1E5-29ED8AD5489B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1C1B41F-543D-4C20-A1E5-29ED8AD5489B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{3D81471B-A5FC-4E3C-9839-84C4BFE752C7} = {6AF7D0E5-EBB7-4B2F-B616-FD0029F91147}
+		{D1C1B41F-543D-4C20-A1E5-29ED8AD5489B} = {6AF7D0E5-EBB7-4B2F-B616-FD0029F91147}
+	EndGlobalSection
+EndGlobal
