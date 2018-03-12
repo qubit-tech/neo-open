@@ -1,0 +1,156 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Neo.AddIn.Contracts.Cameras</name>
+    </assembly>
+    <members>
+        <member name="T:Neo.AddIn.Contracts.Cameras.ShutterMode">
+            <summary>
+            相机快门
+            </summary>
+        </member>
+        <member name="F:Neo.AddIn.Contracts.Cameras.ShutterMode.Global">
+            <summary>
+            全局曝光
+            </summary>
+        </member>
+        <member name="F:Neo.AddIn.Contracts.Cameras.ShutterMode.GlobalResetRelease">
+            <summary>
+            全局重置释放
+            </summary>
+        </member>
+        <member name="F:Neo.AddIn.Contracts.Cameras.ShutterMode.Rolling">
+            <summary>
+            逐行曝光
+            </summary>
+        </member>
+        <member name="T:Neo.AddIn.Contracts.Cameras.ICamera">
+            <summary>
+            相机交互接口。
+            </summary>
+        </member>
+        <member name="P:Neo.AddIn.Contracts.Cameras.ICamera.SN">
+            <summary>
+            相机序列号。
+            </summary>
+        </member>
+        <member name="P:Neo.AddIn.Contracts.Cameras.ICamera.Vendor">
+            <summary>
+            相机供应商名称。
+            </summary>
+        </member>
+        <member name="P:Neo.AddIn.Contracts.Cameras.ICamera.ModelName">
+            <summary>
+            相机型号。
+            </summary>
+        </member>
+        <member name="P:Neo.AddIn.Contracts.Cameras.ICamera.PixelFormat">
+            <summary>
+            相机使用的像素格式。可以为: "gray8" "rgb24" "rgba32" "rggb8" "grbg8" "gbrg8" "bggr8"。
+            </summary>
+        </member>
+        <member name="P:Neo.AddIn.Contracts.Cameras.ICamera.PixelWidth">
+            <summary>
+            相机横向分辨率。
+            </summary>
+        </member>
+        <member name="P:Neo.AddIn.Contracts.Cameras.ICamera.PixelHeight">
+            <summary>
+            相机纵向分辨率。
+            </summary>
+        </member>
+        <member name="P:Neo.AddIn.Contracts.Cameras.ICamera.ShutterMode">
+            <summary>
+            相机快门模式。
+            </summary>
+        </member>
+        <member name="M:Neo.AddIn.Contracts.Cameras.ICamera.Initialize">
+            <summary>
+            初始化相机，每次重置相机时调用。
+            </summary>
+        </member>
+        <member name="M:Neo.AddIn.Contracts.Cameras.ICamera.WarmUp">
+            <summary>
+            预热操作，每次使用相机之前会调用。
+            </summary>
+        </member>
+        <member name="M:Neo.AddIn.Contracts.Cameras.ICamera.Acquire">
+            <summary>
+            采集图像。
+            </summary>
+            <returns>返回图像ID。</returns>
+        </member>
+        <member name="M:Neo.AddIn.Contracts.Cameras.ICamera.RetrieveData(System.Guid)">
+            <summary>
+            获取图像数据。
+            </summary>
+            <param name="id">指定由Acquire获取的图像ID。</param>
+            <returns>返回图像数据。</returns>
+        </member>
+        <member name="T:Neo.AddIn.Contracts.Cameras.CameraBase">
+            <summary>
+            相机插件基类。
+            </summary>
+        </member>
+        <member name="T:Neo.AddIn.Contracts.Cameras.ILineScanCamera">
+            <summary>
+            线阵相机交换接口
+            </summary>
+        </member>
+        <member name="P:Neo.AddIn.Contracts.Cameras.ILineScanCamera.SN">
+            <summary>
+            相机序列号。
+            </summary>
+        </member>
+        <member name="P:Neo.AddIn.Contracts.Cameras.ILineScanCamera.Vendor">
+            <summary>
+            相机供应商名称。
+            </summary>
+        </member>
+        <member name="P:Neo.AddIn.Contracts.Cameras.ILineScanCamera.ModelName">
+            <summary>
+            相机型号。
+            </summary>
+        </member>
+        <member name="P:Neo.AddIn.Contracts.Cameras.ILineScanCamera.PixelFormat">
+            <summary>
+            相机使用的像素格式。可以为: "gray8" "rgb24" "rgba32" "rggb8" "grbg8" "gbrg8" "bggr8"。
+            </summary>
+        </member>
+        <member name="P:Neo.AddIn.Contracts.Cameras.ILineScanCamera.LineWidth">
+            <summary>
+            相机线分辨率。
+            </summary>
+        </member>
+        <member name="P:Neo.AddIn.Contracts.Cameras.ILineScanCamera.TileHeight">
+            <summary>
+            相机纵向分辨率。
+            </summary>
+        </member>
+        <member name="M:Neo.AddIn.Contracts.Cameras.ILineScanCamera.Initialize">
+            <summary>
+            初始化相机，每次重置相机时调用。
+            </summary>
+        </member>
+        <member name="M:Neo.AddIn.Contracts.Cameras.ILineScanCamera.WarmUp">
+            <summary>
+            预热操作，每次使用相机之前会调用。
+            </summary>
+        </member>
+        <member name="M:Neo.AddIn.Contracts.Cameras.ILineScanCamera.Acquire(System.Int32)">
+            <summary>
+            采集图像。
+            </summary>
+            <param name="tileCount">指定采集的块数。</param>
+            <returns>返回图像ID。</returns>
+        </member>
+        <member name="M:Neo.AddIn.Contracts.Cameras.ILineScanCamera.RetrieveData(System.Guid,System.Int32)">
+            <summary>
+            获取图像数据。
+            </summary>
+            <param name="acquireId">指定由Acquire获取的图像ID。</param>
+            <param name="timeout">指定获取超时时间，单位为毫秒。</param>
+            <returns>返回图像数据。</returns>
+        </member>
+    </members>
+</doc>
