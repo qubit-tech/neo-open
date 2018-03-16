@@ -13,6 +13,8 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Neo.AddIn.Hikvision.MVC", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neo.AddIn.Pylon", "AddIns\Neo.AddIn.Pylon\Neo.AddIn.Pylon.csproj", "{6A73667F-ECC9-40B3-8411-940C632FF1B2}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Neo.AddIn.SerialPortBarcodesScanner", "AddIns\Neo.AddIn.SerialPortBarcodesScanner\Neo.AddIn.SerialPortBarcodesScanner.fsproj", "{94E60B3A-AB90-4001-A22C-80B8711D3518}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,10 @@ Global
 		{6A73667F-ECC9-40B3-8411-940C632FF1B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6A73667F-ECC9-40B3-8411-940C632FF1B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6A73667F-ECC9-40B3-8411-940C632FF1B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{94E60B3A-AB90-4001-A22C-80B8711D3518}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94E60B3A-AB90-4001-A22C-80B8711D3518}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94E60B3A-AB90-4001-A22C-80B8711D3518}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94E60B3A-AB90-4001-A22C-80B8711D3518}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -44,6 +50,7 @@ Global
 		{D1C1B41F-543D-4C20-A1E5-29ED8AD5489B} = {6AF7D0E5-EBB7-4B2F-B616-FD0029F91147}
 		{27F6FC2C-FBFE-491C-B839-4DCA1A78A289} = {6AF7D0E5-EBB7-4B2F-B616-FD0029F91147}
 		{6A73667F-ECC9-40B3-8411-940C632FF1B2} = {6AF7D0E5-EBB7-4B2F-B616-FD0029F91147}
+		{94E60B3A-AB90-4001-A22C-80B8711D3518} = {6AF7D0E5-EBB7-4B2F-B616-FD0029F91147}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {24B81E60-16EF-403E-AD55-11D34AE11B68}

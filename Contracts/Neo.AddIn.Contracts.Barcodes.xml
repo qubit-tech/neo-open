@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Neo.AddIn.Contracts.Barcodes</name>
+    </assembly>
+    <members>
+        <member name="T:Neo.AddIn.Contracts.Barcodes.IBarcodesScanner">
+            <summary>
+            条码扫描器接口。
+            </summary>
+        </member>
+        <member name="M:Neo.AddIn.Contracts.Barcodes.IBarcodesScanner.Initialize">
+            <summary>
+            初始化。
+            </summary>
+        </member>
+        <member name="M:Neo.AddIn.Contracts.Barcodes.IBarcodesScanner.GetIDs">
+            <summary>
+            获取扫描器实例ID数组。
+            </summary>
+            <returns>扫描器实例ID数组。</returns>
+        </member>
+        <member name="M:Neo.AddIn.Contracts.Barcodes.IBarcodesScanner.ScanOnce(System.String[],System.TimeSpan)">
+            <summary>
+            扫描指定ID实例的条码。
+            </summary>
+            <param name="ids">扫描器实例ID数组。</param>
+            <param name="timeout">超时时间。</param>
+            <returns>扫描到的条码数组，未能扫描到条码时返回空字符串。</returns>
+        </member>
+        <member name="M:Neo.AddIn.Contracts.Barcodes.IBarcodesScanner.Stop">
+            <summary>
+            停止当前扫描条码。
+            </summary>
+        </member>
+    </members>
+</doc>

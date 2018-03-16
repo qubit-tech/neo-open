@@ -1,0 +1,3 @@
+﻿baud-rate = 115200
+start-command = [22, 84, 13]
+stop-command = [22, 85, 13]
