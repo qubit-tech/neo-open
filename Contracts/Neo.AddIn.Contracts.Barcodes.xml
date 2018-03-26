@@ -14,11 +14,12 @@
             初始化。
             </summary>
         </member>
-        <member name="M:Neo.AddIn.Contracts.Barcodes.IBarcodesScanner.GetIDs">
+        <member name="M:Neo.AddIn.Contracts.Barcodes.IBarcodesScanner.GetIDs(System.Int32)">
             <summary>
             获取扫描器实例ID数组。
             </summary>
             <returns>扫描器实例ID数组。</returns>
+            <param name="group">扫描器组ID。</param>
         </member>
         <member name="M:Neo.AddIn.Contracts.Barcodes.IBarcodesScanner.ScanOnce(System.String[],System.TimeSpan)">
             <summary>
@@ -28,10 +29,11 @@
             <param name="timeout">超时时间。</param>
             <returns>扫描到的条码数组，未能扫描到条码时返回空字符串。</returns>
         </member>
-        <member name="M:Neo.AddIn.Contracts.Barcodes.IBarcodesScanner.Stop">
+        <member name="M:Neo.AddIn.Contracts.Barcodes.IBarcodesScanner.Stop(System.String[])">
             <summary>
             停止当前扫描条码。
             </summary>
+            <param name="ids">扫描器实例ID数组。</param>
         </member>
     </members>
 </doc>
