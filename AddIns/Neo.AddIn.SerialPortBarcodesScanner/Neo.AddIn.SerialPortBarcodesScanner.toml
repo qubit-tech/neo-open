@@ -1,0 +1,37 @@
+﻿# 串口条码扫描器配置
+
+[[scanner]]
+group-id = 1                   # 分组号
+serial-ports = ["COM1"]        # 串口名，可以重复同一个串口
+model = "default"              # 扫描器型号
+
+# [[scanner]]
+# group-id = 2
+# serial-ports = ["COM2", "COM3"]
+# model = "honeywell"
+
+[[model]]
+name = "default"               # 扫描器型号名称
+baud-rate = 9600               # 波特率
+data-bits = 8                  # 数据位
+stop-bits = 1                  # 数据位
+parity = "n"                   # 校验位，"n"：无，"e"：偶校验，"o"：奇校验 
+start-command = "T\r\n"        # 触发扫描命令
+stop-command = "S\r\n"         # 停止扫描命令
+
+[[model]]
+name = "honeywell"
+baud-rate = 9600
+data-bits = 8
+stop-bits = 1
+parity = "n"
+start-command = [22, 84, 13]
+stop-command = [22, 85, 13]
+
+[[model]]
+name = "symbol"
+baud-rate = 9600
+data-bits = 8
+stop-bits = 1
+parity = "n"
+
