@@ -15,38 +15,22 @@ namespace Neo.AddIn.Pylon
     {
         const int MAX_BUFFER_COUNT = 5;
 
-        //sealed class DataTransfer : Contracts.Cameras.IDataTransfer<byte[]>
-        //{
-        //    public PylonCamera Camera { get; private set; }
-        //    public Guid Id { get; private set; }
-        //    public DataTransfer(PylonCamera camera, Guid acqId)
-        //    {
-        //        this.Camera = camera;
-        //        this.Id = acqId;
-        //    }
-        //    public byte[] GetData()
-        //    {
-        //        return this.Camera.RetrieveData(this.Id);
-        //    }
-        //}
-
         ConcurrentDictionary<Guid, Task<byte[]>> _acqusitions = new ConcurrentDictionary<Guid, Task<byte[]>>();
 
         Camera _camera = null;
         BlockingCollection<Action> _actionQueue;
 
+        // 启动后台处理任务。
         static BlockingCollection<Action> StartQueue()
         {
             var actions = new BlockingCollection<Action>(new ConcurrentQueue<Action>());
             new Thread(() =>
             {
-                Debug.WriteLine(string.Format("SingleThreadTaskScheduler thread [{0}] started.", Thread.CurrentThread.ManagedThreadId));
                 Action act;
                 while (actions.TryTake(out act, -1))
                 {
                     act();
                 }
-                Debug.WriteLine(string.Format("SingleThreadTaskScheduler thread [{0}] stopped.", Thread.CurrentThread.ManagedThreadId));
             })
             { IsBackground = true }.Start();
             return actions;
@@ -82,11 +66,13 @@ namespace Neo.AddIn.Pylon
         public void Initialize()
         {
             var camera = new Camera();
+
+            // 获取相机基本信息。
             this.SN = camera.CameraInfo[CameraInfoKey.SerialNumber];
             this.ModelName = camera.CameraInfo[CameraInfoKey.ModelName];
             this.Vendor = camera.CameraInfo[CameraInfoKey.VendorName];
 
-            //camera.CameraOpened += Configuration.SoftwareTrigger;
+            // 打开相机获取详细信息。
             camera.CameraOpened += Configuration.AcquireSingleFrame;
             camera.Open();
 
@@ -94,6 +80,7 @@ namespace Neo.AddIn.Pylon
             this.PixelHeight = (int)camera.Parameters[PLCamera.Height].GetValue();
             this.PixelFormat = camera.Parameters[PLCamera.PixelFormat].GetValue();
 
+            // 获取曝光模式，GlobalResetReleaseModeEnable配合硬件可以模拟全局曝光。
             if (!camera.Parameters[PLCamera.ShutterMode].IsEmpty)
             {
                 var shutterMode = camera.Parameters[PLCamera.ShutterMode].GetValue();
@@ -104,6 +91,7 @@ namespace Neo.AddIn.Pylon
                 this.ShutterMode = camera.Parameters[PLCamera.GlobalResetReleaseModeEnable].GetValue() ? Contracts.Cameras.ShutterMode.GlobalResetRelease : Contracts.Cameras.ShutterMode.Rolling;
             }
 
+            // 获取曝光时间，单位：毫秒
             switch (camera.CameraInfo[CameraInfoKey.DeviceType])
             {
                 case "BaslerUsb":
@@ -122,8 +110,6 @@ namespace Neo.AddIn.Pylon
                     throw new Exception(string.Format("Unsupported device type: {0}", camera.CameraInfo[CameraInfoKey.DeviceType]));
             }
 
-            //camera.StreamGrabber.Start(GrabStrategy.OneByOne, GrabLoop.ProvidedByUser);
-
             this._camera = camera;
             _actionQueue = StartQueue();
         }
@@ -135,7 +121,7 @@ namespace Neo.AddIn.Pylon
         public int PixelHeight { get; private set; }
         public int PixelWidth { get; private set; }
         public double ExposureMS { get; private set; }
-       
+
         public Contracts.Cameras.ShutterMode ShutterMode { get; private set; }
 
         void AddAcqusition(Guid acqId, Task<byte[]> task)
@@ -149,67 +135,62 @@ namespace Neo.AddIn.Pylon
             _acqusitions[acqId] = task;
         }
 
+        // 启动异步采集，返回任务Id。
         async Task<Guid> AcquireAsync()
         {
             var modelName = this.ModelName;
             var cam = this._camera;
             var grabber = cam.StreamGrabber;
             var tcs = new TaskCompletionSource<byte[]>();
+
+            // 启动采集。
             grabber.Start(1, GrabStrategy.OneByOne, GrabLoop.ProvidedByUser);
+
+            // 添加后台获取数据。
             var acqId = Guid.NewGuid();
-            //if (!cam.WaitForFrameTriggerReady(5000, TimeoutHandling.Return))
-            //{
-            //    tcs.SetException(new Exception(string.Format("Camera[{0}] execute software trigger failed.", modelName)));
-            //}
-            //else
+            _actionQueue.Add(() =>
             {
-                //cam.ExecuteSoftwareTrigger();
-                _actionQueue.Add(() =>
+                using (var result = grabber.RetrieveResult(5000, TimeoutHandling.Return))
                 {
-                    using (var result = grabber.RetrieveResult(5000, TimeoutHandling.Return))
+                    if (result.GrabSucceeded)
                     {
-                        if (result.GrabSucceeded)
-                        {
-                            var data = (byte[])result.PixelData;
-                            tcs.SetResult((byte[])data.Clone());
-                        }
-                        else
-                        {
-                            tcs.SetException(new Exception(string.Format("Camera[{0}] grab frame failed.", modelName)));
-                        }
+                        var data = (byte[])result.PixelData;
+                        tcs.SetResult((byte[])data.Clone());
                     }
-                });
-                //cam.WaitForFrameTriggerReady(-1, TimeoutHandling.Return);
-                //return new DataTransfer(tcs.Task);
-                switch (this.ShutterMode)
-                {
-                    case Contracts.Cameras.ShutterMode.Global:
-                    case Contracts.Cameras.ShutterMode.GlobalResetRelease:
-                        {
-                            await Task.Delay(TimeSpan.FromMilliseconds(this.ExposureMS));
-                            //return new DataTransfer(tcs.Task);
-                        }
-                        break;
-                    default:
-                        {
-                            try
-                            {
-                                await tcs.Task;
-                            }
-                            catch
-                            { }
-                        }
-                        break;
+                    else
+                    {
+                        tcs.SetException(new Exception(string.Format("Camera[{0}] grab frame failed.", modelName)));
+                    }
                 }
+            });
+
+            // 如果是整帧曝光，仅需等待曝光时间结束；如果是逐行曝光，需等待采集结束。
+            switch (this.ShutterMode)
+            {
+                case Contracts.Cameras.ShutterMode.Global:
+                case Contracts.Cameras.ShutterMode.GlobalResetRelease:
+                    {
+                        await Task.Delay(TimeSpan.FromMilliseconds(this.ExposureMS));
+                    }
+                    break;
+                default:
+                    {
+                        try
+                        {
+                            await tcs.Task;
+                        }
+                        catch
+                        { }
+                    }
+                    break;
             }
+
             AddAcqusition(acqId, tcs.Task);
             return acqId;
         }
 
         public Guid Acquire()
         {
-            //var acqId = AcquireAsync().Result;
-            //return new DataTransfer(this, acqId);
             return AcquireAsync().Result;
         }
 
@@ -225,6 +206,7 @@ namespace Neo.AddIn.Pylon
 
         public void WarmUp()
         {
+            // 简单插件，不做资源优化。
         }
     }
 }
