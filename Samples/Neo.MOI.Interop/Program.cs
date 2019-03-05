@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -75,11 +76,57 @@ namespace Neo.MOI.Interop
                 return await resp.Content.ReadAsStringAsync();
             }
         }
+        static async Task<string> RenderSharedImage(HttpClient client, string rpcUri)
+        {
+            var imageName = "render-image-1";      // 共享图像名
+            var fmt = "rgb24";              // 图像像素格式
+            var w = 2048;                   // 图像宽度
+            var h = 1024;                   // 图像高度
+            var channels = 3;               // 图像颜色通道数
+            var bytes = w * h * channels;   // 图像字节数
+
+            using (var mapFile = System.IO.MemoryMappedFiles.MemoryMappedFile.CreateNew(imageName, bytes))
+            {
+
+                // 构建远程过程调用命令
+                var cmd =
+                    new RpcCommandWithId
+                    {
+                        id = 1,
+                        method = "render_shared_image",
+                        @params = new object[] { imageName, fmt, w, h, 0.0, 0.0, w * 0.04, h * 0.04 },
+                    };
+
+                // 远程过程调用
+                var json = Newtonsoft.Json.JsonConvert.SerializeObject(cmd);
+                var content = new StringContent(json, Encoding.UTF8, "application/json-rpc");
+                var resp = await client.PostAsync(rpcUri, content);
+                var result = await resp.Content.ReadAsStringAsync();
+                using (var accessor = mapFile.CreateViewAccessor())
+                {
+                    var data = new byte[bytes];
+                    accessor.ReadArray(0, data, 0, data.Length);
+                    for (var y = 0; y < h; ++y)
+                        for (var x = 0; x < w; ++x)
+                        {
+                            var i = ((y * w) + x) * 3;
+                            var r = (x % w) * 256 / w;
+                            var g = (y % h) * 256 / h;
+                            Debug.Assert(data[i + 0] == r);
+                            Debug.Assert(data[i + 1] == g);
+                            Debug.Assert(data[i + 2] == 0);
+                        }
+                }
+                return result;
+            }
+        }
         static void Main(string[] args)
         {
             var client = new HttpClient();
             var rpcUri = "http://127.0.0.1:8080/rpc";
             var r = LoadSharedImage(client, rpcUri).Result;
+            Console.WriteLine(r);
+            r = RenderSharedImage(client, rpcUri).Result;
             Console.WriteLine(r);
             Console.ReadLine();
         }
